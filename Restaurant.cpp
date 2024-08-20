@@ -15,10 +15,18 @@ private:
     double price;
 
 public:
-    void hello()
+    void setMenuItem(string n, string c, double p)
     {
-        cout << "I am Menu Item" << endl;
-        ;
+        this->name = n;
+        this->category = c;
+        this->price = p;
+    }
+
+    void display()
+    {
+        cout << "Item: " << this->name << endl
+             << "Category: " << this->category << endl
+             << "Price: " << this->price << endl;
     }
 };
 
@@ -30,18 +38,30 @@ private:
     double salary;
 
 public:
-    void hello()
+    Employee(string n, string r, double s)
     {
-        cout << "I am employee" << endl;
+        this->name = n;
+        this->role = r;
+        this->salary = s;
+    }
+
+    void display()
+    {
+        cout << "Employee: " << this->name << endl
+             << "Role: " << this->role << endl
+             << "Salary: " << this->salary << endl;
     }
 };
 
 int main()
 {
-    MenuItem pizza;
-    pizza.hello();
+    MenuItem Rice;
+    Rice.setMenuItem("Rice", "Dinner", 100.0);
+    cout << "Menu: " << endl;
+    Rice.display();
 
-    Employee Shiva;
-    Shiva.hello();
+    Employee shiva("Shiva", "Chef", 50000.0);
+    cout << "Employee: " << endl;
+    shiva.display();
     return 0;
 }
