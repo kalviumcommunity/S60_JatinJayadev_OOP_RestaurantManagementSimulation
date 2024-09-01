@@ -57,8 +57,8 @@ class Restaurant
 {
 private:
     string name;
-    vector<MenuItem> menu;
-    vector<Employee> employees;
+    vector<MenuItem *> menu;
+    vector<Employee *> employees;
 
 public:
     void setRestaurantName(string n)
@@ -66,12 +66,12 @@ public:
         this->name = n;
     }
 
-    void addMenuItem(MenuItem item)
+    void addMenuItem(MenuItem *item)
     {
         menu.push_back(item);
     }
 
-    void addEmployee(Employee emp)
+    void addEmployee(Employee *emp)
     {
         employees.push_back(emp);
     }
@@ -83,26 +83,26 @@ public:
         for (int i = 0; i < menu.size(); i++)
         {
             cout << i + 1 << ".";
-            menu[i].display();
+            menu[i]->display();
         }
         cout << "Employees: " << endl;
         for (int i = 0; i < employees.size(); i++)
         {
             cout << i + 1 << ".";
-            employees[i].display();
+            employees[i]->display();
         }
     }
 };
 
 int main()
 {
-    Restaurant myRestaurant;
+    Restaurant *myRestaurant = new Restaurant();
     string restaurantName;
     int numMenuItems, numEmployees;
 
     cout << "Enter Restaurant Name: ";
     getline(cin, restaurantName);
-    myRestaurant.setRestaurantName(restaurantName);
+    myRestaurant->setRestaurantName(restaurantName);
 
     cout << "Enter the number of menu items: ";
     cin >> numMenuItems;
@@ -121,9 +121,9 @@ int main()
         cout << "Price: ";
         cin >> price;
 
-        MenuItem item;
-        item.setMenuItem(name, category, price);
-        myRestaurant.addMenuItem(item);
+        MenuItem *item = new MenuItem(); // Dynamic allocation for MenuItem
+        item->setMenuItem(name, category, price);
+        myRestaurant->addMenuItem(item);
     }
 
     cout << "Enter the number of employees: ";
@@ -142,11 +142,13 @@ int main()
         cout << "Salary: ";
         cin >> salary;
 
-        Employee emp(name, role, salary);
-        myRestaurant.addEmployee(emp);
+        Employee *emp = new Employee(name, role, salary);
+        myRestaurant->addEmployee(emp);
     }
 
-    myRestaurant.displayRestaurant();
+    myRestaurant->displayRestaurant();
+
+    delete myRestaurant;
 
     return 0;
 }
