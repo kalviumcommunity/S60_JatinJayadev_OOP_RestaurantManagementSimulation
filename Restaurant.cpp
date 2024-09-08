@@ -98,65 +98,82 @@ public:
             employees[i]->display();
         }
     }
+
+    static int getRestaurantCount()
+    {
+        return restaurantCount;
+    }
 };
 
 int Restaurant::restaurantCount = 0;
 
 int main()
 {
-    Restaurant *myRestaurant = new Restaurant();
-    string restaurantName;
-    int numMenuItems, numEmployees;
+    int numRestaurants;
 
-    cout << "Enter Restaurant Name: ";
-    getline(cin, restaurantName);
-    myRestaurant->setRestaurantName(restaurantName);
+    cout << "Enter the number of restaurants to create: ";
+    cin >> numRestaurants;
+    cin.ignore();
 
-    cout << "Enter the number of menu items: ";
-    cin >> numMenuItems;
-
-    for (int i = 0; i < numMenuItems; i++)
+    for (int r = 0; r < numRestaurants; r++)
     {
-        string name;
-        string category;
-        double price;
-        cout << "Enter details for Menu Item " << i + 1 << ":" << endl;
-        cout << "Name: ";
-        cin.ignore();
-        getline(cin, name);
-        cout << "Category: ";
-        getline(cin, category);
-        cout << "Price: ";
-        cin >> price;
+        Restaurant *myRestaurant = new Restaurant();
 
-        MenuItem *item = new MenuItem(); // Dynamic allocation for MenuItem
-        item->setMenuItem(name, category, price);
-        myRestaurant->addMenuItem(item);
+        string restaurantName;
+        int numMenuItems, numEmployees;
+
+        cout << "Enter Restaurant Name: ";
+        getline(cin, restaurantName);
+        myRestaurant->setRestaurantName(restaurantName);
+
+        cout << "Enter the number of menu items: ";
+        cin >> numMenuItems;
+
+        for (int i = 0; i < numMenuItems; i++)
+        {
+            string name;
+            string category;
+            double price;
+            cout << "Enter details for Menu Item " << i + 1 << ":" << endl;
+            cout << "Name: ";
+            cin.ignore();
+            getline(cin, name);
+            cout << "Category: ";
+            getline(cin, category);
+            cout << "Price: ";
+            cin >> price;
+
+            MenuItem *item = new MenuItem();
+            item->setMenuItem(name, category, price);
+            myRestaurant->addMenuItem(item);
+        }
+
+        cout << "Enter the number of employees: ";
+        cin >> numEmployees;
+        for (int i = 0; i < numEmployees; i++)
+        {
+            string name;
+            string role;
+            double salary;
+            cout << "Enter details for Employee " << i + 1 << ":" << endl;
+            cout << "Name: ";
+            cin.ignore();
+            getline(cin, name);
+            cout << "Role: ";
+            getline(cin, role);
+            cout << "Salary: ";
+            cin >> salary;
+
+            Employee *emp = new Employee(name, role, salary);
+            myRestaurant->addEmployee(emp);
+        }
+
+        myRestaurant->displayRestaurant();
+
+        delete myRestaurant;
     }
 
-    cout << "Enter the number of employees: ";
-    cin >> numEmployees;
-    for (int i = 0; i < numEmployees; i++)
-    {
-        string name;
-        string role;
-        double salary;
-        cout << "Enter details for Employee " << i + 1 << ":" << endl;
-        cout << "Name: ";
-        cin.ignore();
-        getline(cin, name);
-        cout << "Role: ";
-        getline(cin, role);
-        cout << "Salary: ";
-        cin >> salary;
-
-        Employee *emp = new Employee(name, role, salary);
-        myRestaurant->addEmployee(emp);
-    }
-
-    myRestaurant->displayRestaurant();
-
-    delete myRestaurant;
+    cout << "Total number of restaurants created: " << Restaurant::getRestaurantCount() << endl;
 
     return 0;
 }
