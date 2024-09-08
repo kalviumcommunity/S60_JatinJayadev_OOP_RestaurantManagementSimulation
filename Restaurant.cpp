@@ -6,11 +6,12 @@ using namespace std;
 class MenuItem
 {
 private:
-    string name;
-    string category;
-    double price;
+    string name;     // Hidden
+    string category; // Hidden
+    double price;    // Hidden
 
 public:
+    // Mutator to modify private data
     void setMenuItem(string n, string c, double p)
     {
         this->name = n;
@@ -18,6 +19,7 @@ public:
         this->price = p;
     }
 
+    // Accessor to access private data
     string getName()
     {
         return name;
@@ -33,6 +35,7 @@ public:
         return price;
     }
 
+    // Public method to display item
     void display()
     {
         cout << "Item: " << getName() << endl
@@ -44,9 +47,9 @@ public:
 class Employee
 {
 private:
-    string name;
-    string role;
-    double salary;
+    string name;   // Hidden
+    string role;   // Hidden
+    double salary; // Hidden
 
 public:
     Employee(string n, string r, double s)
@@ -56,6 +59,7 @@ public:
         setSalary(s);
     }
 
+    // Accessors
     string getName()
     {
         return name;
@@ -71,6 +75,7 @@ public:
         return salary;
     }
 
+    // Mutators
     void setName(string n)
     {
         name = n;
@@ -86,6 +91,7 @@ public:
         salary = s;
     }
 
+    // Public methods to display employee details
     void display()
     {
         cout << "Employee: " << getName() << endl
@@ -97,32 +103,36 @@ public:
 class Restaurant
 {
 private:
-    string name;
-    vector<MenuItem *> menu;
-    vector<Employee *> employees;
-    static int restaurantCount;
+    string name;                  // Hidden
+    vector<MenuItem *> menu;      // Hidden
+    vector<Employee *> employees; // Hidden
+    static int restaurantCount;   // Static member to track the count
 
 public:
     Restaurant()
     {
-        restaurantCount++;
+        restaurantCount++; // Increment the count when a restaurant is created
     }
 
+    // Public Setter (Mutator)
     void setRestaurantName(string n)
     {
         this->name = n;
     }
 
+    // Accessor
     string getRestaurantName()
     {
         return name;
     }
 
+    // Public method to add a menu item
     void addMenuItem(MenuItem *item)
     {
         menu.push_back(item);
     }
 
+    // Public method to add an employee
     void addEmployee(Employee *emp)
     {
         employees.push_back(emp);
@@ -145,12 +155,14 @@ public:
         }
     }
 
+    // Static member function
     static int getRestaurantCount()
     {
         return restaurantCount;
     }
 };
 
+// Static member variable
 int Restaurant::restaurantCount = 0;
 
 int main()
