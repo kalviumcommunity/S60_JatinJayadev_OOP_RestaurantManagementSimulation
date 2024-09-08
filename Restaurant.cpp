@@ -1,10 +1,6 @@
-#include <cmath>
-#include <cstdio>
-#include <vector>
 #include <iostream>
-#include <stdlib.h>
-#include <algorithm>
-#include <iomanip>
+#include <vector>
+#include <string>
 using namespace std;
 
 class MenuItem
@@ -22,11 +18,26 @@ public:
         this->price = p;
     }
 
+    string getName()
+    {
+        return name;
+    }
+
+    string getCategory()
+    {
+        return category;
+    }
+
+    double getPrice()
+    {
+        return price;
+    }
+
     void display()
     {
-        cout << "Item: " << this->name << endl
-             << "  Category: " << this->category << endl
-             << "  Price: " << this->price << endl;
+        cout << "Item: " << getName() << endl
+             << "  Category: " << getCategory() << endl
+             << "  Price: " << getPrice() << endl;
     }
 };
 
@@ -40,16 +51,46 @@ private:
 public:
     Employee(string n, string r, double s)
     {
-        this->name = n;
-        this->role = r;
-        this->salary = s;
+        setName(n);
+        setRole(r);
+        setSalary(s);
+    }
+
+    string getName()
+    {
+        return name;
+    }
+
+    string getRole()
+    {
+        return role;
+    }
+
+    double getSalary()
+    {
+        return salary;
+    }
+
+    void setName(string n)
+    {
+        name = n;
+    }
+
+    void setRole(string r)
+    {
+        role = r;
+    }
+
+    void setSalary(double s)
+    {
+        salary = s;
     }
 
     void display()
     {
-        cout << "Employee: " << this->name << endl
-             << "  Role: " << this->role << endl
-             << "  Salary: " << this->salary << endl;
+        cout << "Employee: " << getName() << endl
+             << "  Role: " << getRole() << endl
+             << "  Salary: " << getSalary() << endl;
     }
 };
 
@@ -72,6 +113,11 @@ public:
         this->name = n;
     }
 
+    string getRestaurantName()
+    {
+        return name;
+    }
+
     void addMenuItem(MenuItem *item)
     {
         menu.push_back(item);
@@ -84,7 +130,7 @@ public:
 
     void displayRestaurant()
     {
-        cout << "Restaurant Name: " << this->name << endl;
+        cout << "Restaurant Name: " << getRestaurantName() << endl;
         cout << "Menu: " << endl;
         for (int i = 0; i < menu.size(); i++)
         {
