@@ -59,8 +59,14 @@ private:
     string name;
     vector<MenuItem *> menu;
     vector<Employee *> employees;
+    static int restaurantCount;
 
 public:
+    Restaurant()
+    {
+        restaurantCount++;
+    }
+
     void setRestaurantName(string n)
     {
         this->name = n;
@@ -93,6 +99,8 @@ public:
         }
     }
 };
+
+int Restaurant::restaurantCount = 0;
 
 int main()
 {
