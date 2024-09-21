@@ -6,36 +6,27 @@ using namespace std;
 class MenuItem
 {
 private:
-    string name;     // Hidden
-    string category; // Hidden
-    double price;    // Hidden
+    string name;
+    string category;
+    double price;
 
 public:
-    // Mutator to modify private data
-    void setMenuItem(string n, string c, double p)
+    MenuItem(string n, string c, double p)
     {
-        this->name = n;
-        this->category = c;
-        this->price = p;
+        name = n;
+        category = c;
+        price = p;
     }
 
-    // Accessor to access private data
-    string getName()
+    ~MenuItem()
     {
-        return name;
+        cout << "Destructor is called for MenuItem: " << name << endl;
     }
 
-    string getCategory()
-    {
-        return category;
-    }
+    string getName() { return name; }
+    string getCategory() { return category; }
+    double getPrice() { return price; }
 
-    double getPrice()
-    {
-        return price;
-    }
-
-    // Public method to display item
     void display()
     {
         cout << "Item: " << getName() << endl
@@ -47,51 +38,34 @@ public:
 class Employee
 {
 private:
-    string name;   // Hidden
-    string role;   // Hidden
-    double salary; // Hidden
+    string name;
+    string role;
+    double salary;
 
 public:
+    Employee()
+    {
+        name = "NA";
+        role = "NA";
+        salary = 0.0;
+    }
+
     Employee(string n, string r, double s)
     {
-        setName(n);
-        setRole(r);
-        setSalary(s);
-    }
-
-    // Accessors
-    string getName()
-    {
-        return name;
-    }
-
-    string getRole()
-    {
-        return role;
-    }
-
-    double getSalary()
-    {
-        return salary;
-    }
-
-    // Mutators
-    void setName(string n)
-    {
         name = n;
-    }
-
-    void setRole(string r)
-    {
         role = r;
-    }
-
-    void setSalary(double s)
-    {
         salary = s;
     }
 
-    // Public methods to display employee details
+    ~Employee()
+    {
+        cout << "Destructor is called for Employee: " << name << endl;
+    }
+
+    string getName() { return name; }
+    string getRole() { return role; }
+    double getSalary() { return salary; }
+
     void display()
     {
         cout << "Employee: " << getName() << endl
@@ -103,37 +77,37 @@ public:
 class Restaurant
 {
 private:
-    string name;                  // Hidden
-    vector<MenuItem *> menu;      // Hidden
-    vector<Employee *> employees; // Hidden
-    static int restaurantCount;   // Static member to track the count
+    string name;
+    vector<MenuItem> menu;
+    vector<Employee> employees;
 
 public:
-    Restaurant()
+    Restaurant(string n)
     {
-        restaurantCount++; // Increment the count when a restaurant is created
+        name = n;
     }
 
-    // Public Setter (Mutator)
+    ~Restaurant()
+    {
+        cout << "Destructor called for Restaurant: " << name << endl;
+    }
+
     void setRestaurantName(string n)
     {
         this->name = n;
     }
 
-    // Accessor
     string getRestaurantName()
     {
         return name;
     }
 
-    // Public method to add a menu item
-    void addMenuItem(MenuItem *item)
+    void addMenuItem(const MenuItem &item)
     {
         menu.push_back(item);
     }
 
-    // Public method to add an employee
-    void addEmployee(Employee *emp)
+    void addEmployee(const Employee &emp)
     {
         employees.push_back(emp);
     }
@@ -144,94 +118,32 @@ public:
         cout << "Menu: " << endl;
         for (int i = 0; i < menu.size(); i++)
         {
-            cout << i + 1 << ".";
-            menu[i]->display();
+            cout << i + 1 << ". ";
+            menu[i].display();
         }
         cout << "Employees: " << endl;
         for (int i = 0; i < employees.size(); i++)
         {
-            cout << i + 1 << ".";
-            employees[i]->display();
+            cout << i + 1 << ". ";
+            employees[i].display();
         }
-    }
-
-    // Static member function
-    static int getRestaurantCount()
-    {
-        return restaurantCount;
     }
 };
 
-// Static member variable
-int Restaurant::restaurantCount = 0;
-
 int main()
 {
-    int numRestaurants;
+    Restaurant myRestaurant("Snack Bites");
 
-    cout << "Enter the number of restaurants to create: ";
-    cin >> numRestaurants;
-    cin.ignore();
+    MenuItem item1("Burger", "Snack", 8.5);
+    myRestaurant.addMenuItem(item1);
 
-    for (int r = 0; r < numRestaurants; r++)
-    {
-        Restaurant *myRestaurant = new Restaurant();
+    Employee emp1("Alice", "Manager", 3000);
+    myRestaurant.addEmployee(emp1);
 
-        string restaurantName;
-        int numMenuItems, numEmployees;
+    Employee defaultEmployee;
+    myRestaurant.addEmployee(defaultEmployee);
 
-        cout << "Enter Restaurant Name: ";
-        getline(cin, restaurantName);
-        myRestaurant->setRestaurantName(restaurantName);
-
-        cout << "Enter the number of menu items: ";
-        cin >> numMenuItems;
-
-        for (int i = 0; i < numMenuItems; i++)
-        {
-            string name;
-            string category;
-            double price;
-            cout << "Enter details for Menu Item " << i + 1 << ":" << endl;
-            cout << "Name: ";
-            cin.ignore();
-            getline(cin, name);
-            cout << "Category: ";
-            getline(cin, category);
-            cout << "Price: ";
-            cin >> price;
-
-            MenuItem *item = new MenuItem();
-            item->setMenuItem(name, category, price);
-            myRestaurant->addMenuItem(item);
-        }
-
-        cout << "Enter the number of employees: ";
-        cin >> numEmployees;
-        for (int i = 0; i < numEmployees; i++)
-        {
-            string name;
-            string role;
-            double salary;
-            cout << "Enter details for Employee " << i + 1 << ":" << endl;
-            cout << "Name: ";
-            cin.ignore();
-            getline(cin, name);
-            cout << "Role: ";
-            getline(cin, role);
-            cout << "Salary: ";
-            cin >> salary;
-
-            Employee *emp = new Employee(name, role, salary);
-            myRestaurant->addEmployee(emp);
-        }
-
-        myRestaurant->displayRestaurant();
-
-        delete myRestaurant;
-    }
-
-    cout << "Total number of restaurants created: " << Restaurant::getRestaurantCount() << endl;
+    myRestaurant.displayRestaurant();
 
     return 0;
 }
