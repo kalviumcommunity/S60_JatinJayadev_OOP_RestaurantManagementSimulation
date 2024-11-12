@@ -3,6 +3,7 @@
 #include <string>
 using namespace std;
 
+// Abstract base class Person
 class Person
 {
 private:
@@ -13,13 +14,11 @@ public:
 
     string getName() { return name; }
 
-    void display()
-    {
-        cout << "Name: " << name << endl;
-    }
+    // Pure virtual function to make Person an abstract class
+    virtual void display() = 0;
 };
 
-// Derived class Employee (Single Inheritance)
+// Derived class Employee (inherits from abstract class Person)
 class Employee : public Person
 {
 private:
@@ -34,22 +33,12 @@ public:
     string getRole() { return role; }
     double getSalary() { return salary; }
 
-    // Function Overloading for Polymorphism
-    void display()
+    // Overriding the pure virtual function from Person
+    void display() override
     {
         cout << "Employee: " << getName() << endl
              << "  Role: " << getRole() << endl
              << "  Salary: " << getSalary() << endl;
-    }
-
-    void display(bool showSalary)
-    {
-        cout << "Employee: " << getName() << endl
-             << "  Role: " << getRole() << endl;
-        if (showSalary)
-        {
-            cout << "  Salary: " << getSalary() << endl;
-        }
     }
 };
 
@@ -68,22 +57,11 @@ public:
     string getCategory() { return category; }
     double getPrice() { return price; }
 
-    // Function Overloading for Polymorphism
     void display()
     {
         cout << "Item: " << getName() << endl
              << "  Category: " << getCategory() << endl
              << "  Price: " << getPrice() << endl;
-    }
-
-    void display(bool showCategory)
-    {
-        cout << "Item: " << getName() << endl;
-        if (showCategory)
-        {
-            cout << "  Category: " << getCategory() << endl;
-        }
-        cout << "  Price: " << getPrice() << endl;
     }
 };
 
@@ -93,7 +71,7 @@ class Restaurant
 private:
     string name;
     vector<MenuItem> menu;
-    vector<Employee> employees;
+    vector<Person *> employees; // Using Person* to allow polymorphic behavior
 
 public:
     Restaurant(string n) : name(n) {}
@@ -104,7 +82,7 @@ public:
 
     void addMenuItem(const MenuItem &item) { menu.push_back(item); }
 
-    void addEmployee(const Employee &emp) { employees.push_back(emp); }
+    void addEmployee(Person *emp) { employees.push_back(emp); }
 
     void displayRestaurant()
     {
@@ -113,13 +91,13 @@ public:
         for (int i = 0; i < menu.size(); i++)
         {
             cout << i + 1 << ". ";
-            menu[i].display(true); // Using overloaded display with additional detail
+            menu[i].display();
         }
         cout << "Employees: " << endl;
         for (int i = 0; i < employees.size(); i++)
         {
             cout << i + 1 << ". ";
-            employees[i].display(false); // Using overloaded display with less detail
+            employees[i]->display(); // Virtual function call
         }
     }
 };
@@ -172,7 +150,7 @@ int main()
         cin >> empSalary;
         cin.ignore();
 
-        Employee emp(empName, empRole, empSalary);
+        Person *emp = new Employee(empName, empRole, empSalary);
         myRestaurant.addEmployee(emp);
     }
 
