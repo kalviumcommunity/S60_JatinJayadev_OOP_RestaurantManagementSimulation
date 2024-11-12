@@ -3,6 +3,46 @@
 #include <string>
 using namespace std;
 
+class Person
+{
+private:
+    string name;
+
+public:
+    Person(string n) : name(n) {}
+
+    string getName() { return name; }
+
+    void display()
+    {
+        cout << "Name: " << name << endl;
+    }
+};
+
+// Derived class Employee (Single Inheritance)
+class Employee : public Person
+{
+private:
+    string role;
+    double salary;
+
+public:
+    Employee(string n, string r, double s) : Person(n), role(r), salary(s) {}
+
+    Employee() : Person("NA"), role("NA"), salary(0.0) {}
+
+    string getRole() { return role; }
+    double getSalary() { return salary; }
+
+    void display()
+    {
+        cout << "Employee: " << getName() << endl
+             << "  Role: " << getRole() << endl
+             << "  Salary: " << getSalary() << endl;
+    }
+};
+
+// Base class MenuItem
 class MenuItem
 {
 private:
@@ -11,17 +51,7 @@ private:
     double price;
 
 public:
-    MenuItem(string n, string c, double p)
-    {
-        name = n;
-        category = c;
-        price = p;
-    }
-
-    ~MenuItem()
-    {
-        cout << "Destructor is called for MenuItem: " << name << endl;
-    }
+    MenuItem(string n, string c, double p) : name(n), category(c), price(p) {}
 
     string getName() { return name; }
     string getCategory() { return category; }
@@ -35,45 +65,24 @@ public:
     }
 };
 
-class Employee
+// Derived class BeverageItem (Hierarchical Inheritance)
+class BeverageItem : public MenuItem
 {
 private:
-    string name;
-    string role;
-    double salary;
+    bool isAlcoholic;
 
 public:
-    Employee()
-    {
-        name = "NA";
-        role = "NA";
-        salary = 0.0;
-    }
-
-    Employee(string n, string r, double s)
-    {
-        name = n;
-        role = r;
-        salary = s;
-    }
-
-    ~Employee()
-    {
-        cout << "Destructor is called for Employee: " << name << endl;
-    }
-
-    string getName() { return name; }
-    string getRole() { return role; }
-    double getSalary() { return salary; }
+    BeverageItem(string n, string c, double p, bool alcohol)
+        : MenuItem(n, c, p), isAlcoholic(alcohol) {}
 
     void display()
     {
-        cout << "Employee: " << getName() << endl
-             << "  Role: " << getRole() << endl
-             << "  Salary: " << getSalary() << endl;
+        MenuItem::display();
+        cout << "  Alcoholic: " << (isAlcoholic ? "Yes" : "No") << endl;
     }
 };
 
+// Restaurant class to hold menu and employees
 class Restaurant
 {
 private:
@@ -82,19 +91,11 @@ private:
     vector<Employee> employees;
 
 public:
-    Restaurant(string n)
-    {
-        name = n;
-    }
-
-    ~Restaurant()
-    {
-        cout << "Destructor called for Restaurant: " << name << endl;
-    }
+    Restaurant(string n) : name(n) {}
 
     void setRestaurantName(string n)
     {
-        this->name = n;
+        name = n;
     }
 
     string getRestaurantName()
@@ -132,17 +133,71 @@ public:
 
 int main()
 {
-    Restaurant myRestaurant("Snack Bites");
+    string restaurantName;
+    cout << "Enter restaurant name: ";
+    getline(cin, restaurantName);
+    Restaurant myRestaurant(restaurantName);
 
-    MenuItem item1("Burger", "Snack", 8.5);
-    myRestaurant.addMenuItem(item1);
+    int menuCount;
+    cout << "Enter the number of menu items: ";
+    cin >> menuCount;
+    cin.ignore();
 
-    Employee emp1("Alice", "Manager", 3000);
-    myRestaurant.addEmployee(emp1);
+    for (int i = 0; i < menuCount; i++)
+    {
+        string itemName, itemCategory;
+        double itemPrice;
+        char isAlcoholicInput;
+        bool isAlcoholic = false;
 
-    Employee defaultEmployee;
-    myRestaurant.addEmployee(defaultEmployee);
+        cout << "\nEnter details for Menu Item " << i + 1 << ":" << endl;
+        cout << "Name: ";
+        getline(cin, itemName);
+        cout << "Category: ";
+        getline(cin, itemCategory);
+        cout << "Price: ";
+        cin >> itemPrice;
+        cin.ignore();
 
+        if (itemCategory == "Drink" || itemCategory == "Beverage")
+        {
+            cout << "Is this item alcoholic? (y/n): ";
+            cin >> isAlcoholicInput;
+            cin.ignore();
+            isAlcoholic = (isAlcoholicInput == 'y' || isAlcoholicInput == 'Y');
+            BeverageItem beverage(itemName, itemCategory, itemPrice, isAlcoholic);
+            myRestaurant.addMenuItem(beverage);
+        }
+        else
+        {
+            MenuItem item(itemName, itemCategory, itemPrice);
+            myRestaurant.addMenuItem(item);
+        }
+    }
+
+    int employeeCount;
+    cout << "\nEnter the number of employees: ";
+    cin >> employeeCount;
+    cin.ignore();
+
+    for (int i = 0; i < employeeCount; i++)
+    {
+        string empName, empRole;
+        double empSalary;
+        cout << "\nEnter details for Employee " << i + 1 << ":" << endl;
+        cout << "Name: ";
+        getline(cin, empName);
+        cout << "Role: ";
+        getline(cin, empRole);
+        cout << "Salary: ";
+        cin >> empSalary;
+        cin.ignore();
+
+        Employee emp(empName, empRole, empSalary);
+        myRestaurant.addEmployee(emp);
+    }
+
+    cout << "\nDisplaying Restaurant Details:\n";
     myRestaurant.displayRestaurant();
 
     return 0;
