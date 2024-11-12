@@ -34,11 +34,22 @@ public:
     string getRole() { return role; }
     double getSalary() { return salary; }
 
+    // Function Overloading for Polymorphism
     void display()
     {
         cout << "Employee: " << getName() << endl
              << "  Role: " << getRole() << endl
              << "  Salary: " << getSalary() << endl;
+    }
+
+    void display(bool showSalary)
+    {
+        cout << "Employee: " << getName() << endl
+             << "  Role: " << getRole() << endl;
+        if (showSalary)
+        {
+            cout << "  Salary: " << getSalary() << endl;
+        }
     }
 };
 
@@ -57,28 +68,22 @@ public:
     string getCategory() { return category; }
     double getPrice() { return price; }
 
+    // Function Overloading for Polymorphism
     void display()
     {
         cout << "Item: " << getName() << endl
              << "  Category: " << getCategory() << endl
              << "  Price: " << getPrice() << endl;
     }
-};
 
-// Derived class BeverageItem (Hierarchical Inheritance)
-class BeverageItem : public MenuItem
-{
-private:
-    bool isAlcoholic;
-
-public:
-    BeverageItem(string n, string c, double p, bool alcohol)
-        : MenuItem(n, c, p), isAlcoholic(alcohol) {}
-
-    void display()
+    void display(bool showCategory)
     {
-        MenuItem::display();
-        cout << "  Alcoholic: " << (isAlcoholic ? "Yes" : "No") << endl;
+        cout << "Item: " << getName() << endl;
+        if (showCategory)
+        {
+            cout << "  Category: " << getCategory() << endl;
+        }
+        cout << "  Price: " << getPrice() << endl;
     }
 };
 
@@ -93,25 +98,13 @@ private:
 public:
     Restaurant(string n) : name(n) {}
 
-    void setRestaurantName(string n)
-    {
-        name = n;
-    }
+    void setRestaurantName(string n) { name = n; }
 
-    string getRestaurantName()
-    {
-        return name;
-    }
+    string getRestaurantName() { return name; }
 
-    void addMenuItem(const MenuItem &item)
-    {
-        menu.push_back(item);
-    }
+    void addMenuItem(const MenuItem &item) { menu.push_back(item); }
 
-    void addEmployee(const Employee &emp)
-    {
-        employees.push_back(emp);
-    }
+    void addEmployee(const Employee &emp) { employees.push_back(emp); }
 
     void displayRestaurant()
     {
@@ -120,13 +113,13 @@ public:
         for (int i = 0; i < menu.size(); i++)
         {
             cout << i + 1 << ". ";
-            menu[i].display();
+            menu[i].display(true); // Using overloaded display with additional detail
         }
         cout << "Employees: " << endl;
         for (int i = 0; i < employees.size(); i++)
         {
             cout << i + 1 << ". ";
-            employees[i].display();
+            employees[i].display(false); // Using overloaded display with less detail
         }
     }
 };
@@ -147,8 +140,6 @@ int main()
     {
         string itemName, itemCategory;
         double itemPrice;
-        char isAlcoholicInput;
-        bool isAlcoholic = false;
 
         cout << "\nEnter details for Menu Item " << i + 1 << ":" << endl;
         cout << "Name: ";
@@ -159,20 +150,8 @@ int main()
         cin >> itemPrice;
         cin.ignore();
 
-        if (itemCategory == "Drink" || itemCategory == "Beverage")
-        {
-            cout << "Is this item alcoholic? (y/n): ";
-            cin >> isAlcoholicInput;
-            cin.ignore();
-            isAlcoholic = (isAlcoholicInput == 'y' || isAlcoholicInput == 'Y');
-            BeverageItem beverage(itemName, itemCategory, itemPrice, isAlcoholic);
-            myRestaurant.addMenuItem(beverage);
-        }
-        else
-        {
-            MenuItem item(itemName, itemCategory, itemPrice);
-            myRestaurant.addMenuItem(item);
-        }
+        MenuItem item(itemName, itemCategory, itemPrice);
+        myRestaurant.addMenuItem(item);
     }
 
     int employeeCount;
