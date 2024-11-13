@@ -3,6 +3,7 @@
 #include <string>
 using namespace std;
 
+// Abstract base class Person
 class Person
 {
 private:
@@ -10,10 +11,11 @@ private:
 
 public:
     Person(string n) : name(n) {}
-    string getName() { return name; }
-    virtual void display() = 0; // Abstract method to make Person an abstract class
+    string getName() const { return name; }
+    virtual void display() const = 0; // Abstract method to make Person an abstract class
 };
 
+// Derived class Employee inheriting from abstract Person
 class Employee : public Person
 {
 private:
@@ -23,10 +25,10 @@ private:
 public:
     Employee(string n, string r, double s) : Person(n), role(r), salary(s) {}
 
-    string getRole() { return role; }
-    double getSalary() { return salary; }
+    string getRole() const { return role; }
+    double getSalary() const { return salary; }
 
-    void display() override
+    void display() const override
     {
         cout << "Employee: " << getName() << endl
              << "  Role: " << getRole() << endl
@@ -45,11 +47,11 @@ private:
 public:
     MenuItem(string n, string c, double p) : name(n), category(c), price(p) {}
 
-    string getName() { return name; }
-    string getCategory() { return category; }
-    double getPrice() { return price; }
+    string getName() const { return name; }
+    string getCategory() const { return category; }
+    double getPrice() const { return price; }
 
-    void display()
+    void display() const
     {
         cout << "Item: " << getName() << endl
              << "  Category: " << getCategory() << endl
@@ -57,7 +59,7 @@ public:
     }
 };
 
-// Class to manage the menu
+// Class to manage the menu items, applying the Open/Closed Principle
 class MenuManager
 {
 private:
@@ -69,7 +71,7 @@ public:
         menu.push_back(item);
     }
 
-    void displayMenu()
+    void displayMenu() const
     {
         cout << "Menu: " << endl;
         for (int i = 0; i < menu.size(); i++)
@@ -116,7 +118,7 @@ public:
         name = n;
     }
 
-    string getRestaurantName() { return name; }
+    string getRestaurantName() const { return name; }
 
     void addMenuItem(MenuItem &item)
     {
