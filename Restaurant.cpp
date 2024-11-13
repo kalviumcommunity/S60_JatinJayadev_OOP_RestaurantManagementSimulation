@@ -3,7 +3,6 @@
 #include <string>
 using namespace std;
 
-// Abstract base class Person
 class Person
 {
 private:
@@ -11,14 +10,10 @@ private:
 
 public:
     Person(string n) : name(n) {}
-
     string getName() { return name; }
-
-    // Pure virtual function to make Person an abstract class
-    virtual void display() = 0;
+    virtual void display() = 0; // Abstract method to make Person an abstract class
 };
 
-// Derived class Employee (inherits from abstract class Person)
 class Employee : public Person
 {
 private:
@@ -28,12 +23,9 @@ private:
 public:
     Employee(string n, string r, double s) : Person(n), role(r), salary(s) {}
 
-    Employee() : Person("NA"), role("NA"), salary(0.0) {}
-
     string getRole() { return role; }
     double getSalary() { return salary; }
 
-    // Overriding the pure virtual function from Person
     void display() override
     {
         cout << "Employee: " << getName() << endl
@@ -42,7 +34,7 @@ public:
     }
 };
 
-// Base class MenuItem
+// Separate class for MenuItem
 class MenuItem
 {
 private:
@@ -65,40 +57,82 @@ public:
     }
 };
 
-// Restaurant class to hold menu and employees
-class Restaurant
+// Class to manage the menu
+class MenuManager
 {
 private:
-    string name;
     vector<MenuItem> menu;
-    vector<Person *> employees; // Using Person* to allow polymorphic behavior
 
 public:
-    Restaurant(string n) : name(n) {}
-
-    void setRestaurantName(string n) { name = n; }
-
-    string getRestaurantName() { return name; }
-
-    void addMenuItem(const MenuItem &item) { menu.push_back(item); }
-
-    void addEmployee(Person *emp) { employees.push_back(emp); }
-
-    void displayRestaurant()
+    void addMenuItem(MenuItem &item)
     {
-        cout << "Restaurant Name: " << getRestaurantName() << endl;
+        menu.push_back(item);
+    }
+
+    void displayMenu()
+    {
         cout << "Menu: " << endl;
         for (int i = 0; i < menu.size(); i++)
         {
             cout << i + 1 << ". ";
             menu[i].display();
         }
+    }
+};
+
+// Class to manage employees
+class EmployeeManager
+{
+private:
+    vector<Employee> employees;
+
+public:
+    void addEmployee(const Employee &emp) { employees.push_back(emp); }
+
+    void displayEmployees()
+    {
         cout << "Employees: " << endl;
         for (int i = 0; i < employees.size(); i++)
         {
             cout << i + 1 << ". ";
-            employees[i]->display(); // Virtual function call
+            employees[i].display();
         }
+    }
+};
+
+// Restaurant class only holds name and manages the managers
+class Restaurant
+{
+private:
+    string name;
+    MenuManager menuManager;
+    EmployeeManager employeeManager;
+
+public:
+    Restaurant(string n) : name(n) {}
+
+    void setRestaurantName(string n)
+    {
+        name = n;
+    }
+
+    string getRestaurantName() { return name; }
+
+    void addMenuItem(MenuItem &item)
+    {
+        menuManager.addMenuItem(item);
+    }
+
+    void addEmployee(Employee &emp)
+    {
+        employeeManager.addEmployee(emp);
+    }
+
+    void displayRestaurant()
+    {
+        cout << "Restaurant Name: " << getRestaurantName() << endl;
+        menuManager.displayMenu();
+        employeeManager.displayEmployees();
     }
 };
 
@@ -150,7 +184,7 @@ int main()
         cin >> empSalary;
         cin.ignore();
 
-        Person *emp = new Employee(empName, empRole, empSalary);
+        Employee emp(empName, empRole, empSalary);
         myRestaurant.addEmployee(emp);
     }
 
