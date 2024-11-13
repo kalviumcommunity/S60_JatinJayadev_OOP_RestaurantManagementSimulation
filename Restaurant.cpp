@@ -3,7 +3,6 @@
 #include <string>
 using namespace std;
 
-// Abstract base class Person
 class Person
 {
 private:
@@ -11,11 +10,10 @@ private:
 
 public:
     Person(string n) : name(n) {}
-    string getName() const { return name; }
-    virtual void display() const = 0; // Abstract method to make Person an abstract class
+    string getName() { return name; }
+    virtual void display() = 0; // Abstract method to make Person an abstract class
 };
 
-// Derived class Employee inheriting from abstract Person
 class Employee : public Person
 {
 private:
@@ -25,60 +23,14 @@ private:
 public:
     Employee(string n, string r, double s) : Person(n), role(r), salary(s) {}
 
-    string getRole() const { return role; }
-    double getSalary() const { return salary; }
+    string getRole() { return role; }
+    double getSalary() { return salary; }
 
-    void display() const override
+    void display() override
     {
         cout << "Employee: " << getName() << endl
              << "  Role: " << getRole() << endl
              << "  Salary: " << getSalary() << endl;
-    }
-};
-
-// Separate class for MenuItem
-class MenuItem
-{
-private:
-    string name;
-    string category;
-    double price;
-
-public:
-    MenuItem(string n, string c, double p) : name(n), category(c), price(p) {}
-
-    string getName() const { return name; }
-    string getCategory() const { return category; }
-    double getPrice() const { return price; }
-
-    void display() const
-    {
-        cout << "Item: " << getName() << endl
-             << "  Category: " << getCategory() << endl
-             << "  Price: " << getPrice() << endl;
-    }
-};
-
-// Class to manage the menu items, applying the Open/Closed Principle
-class MenuManager
-{
-private:
-    vector<MenuItem> menu;
-
-public:
-    void addMenuItem(MenuItem &item)
-    {
-        menu.push_back(item);
-    }
-
-    void displayMenu() const
-    {
-        cout << "Menu: " << endl;
-        for (int i = 0; i < menu.size(); i++)
-        {
-            cout << i + 1 << ". ";
-            menu[i].display();
-        }
     }
 };
 
@@ -102,6 +54,52 @@ public:
     }
 };
 
+// Separate class for MenuItem
+class MenuItem
+{
+private:
+    string name;
+    string category;
+    double price;
+
+public:
+    MenuItem(string n, string c, double p) : name(n), category(c), price(p) {}
+
+    string getName() { return name; }
+    string getCategory() { return category; }
+    double getPrice() { return price; }
+
+    void display()
+    {
+        cout << "Item: " << getName() << endl
+             << "  Category: " << getCategory() << endl
+             << "  Price: " << getPrice() << endl;
+    }
+};
+
+// Class to manage the menu
+class MenuManager
+{
+private:
+    vector<MenuItem> menu;
+
+public:
+    void addMenuItem(MenuItem &item)
+    {
+        menu.push_back(item);
+    }
+
+    void displayMenu()
+    {
+        cout << "Menu: " << endl;
+        for (int i = 0; i < menu.size(); i++)
+        {
+            cout << i + 1 << ". ";
+            menu[i].display();
+        }
+    }
+};
+
 // Restaurant class only holds name and manages the managers
 class Restaurant
 {
@@ -118,7 +116,7 @@ public:
         name = n;
     }
 
-    string getRestaurantName() const { return name; }
+    string getRestaurantName() { return name; }
 
     void addMenuItem(MenuItem &item)
     {
